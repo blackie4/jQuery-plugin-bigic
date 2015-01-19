@@ -77,9 +77,6 @@
                 oThis.$popup.append('<img id="imgBigic" class="img-bigic" src="'+ oThis.sImgSrc +'" />');
                 oThis.$img = $('#imgBigic');
                 
-                if(oThis.nImgWid > oThis.nWinWid || oThis.nImgHei > oThis.nWinHei){
-                    $('#changeBigic')[0].style.display = 'inline-block';
-                }
                 oThis.zoom();
             }
             oImg.src = oThis.sImgSrc;
@@ -129,10 +126,20 @@
                 nLeft = 0, nTop = 0,
                 nMal = 0, nMat = 0;
 
+            // 弹窗未打开 或 非img 返回
+            if(!document.getElementById('popupBigic') || !this.nImgWid) return;
+
             this.nWinWid = this.$win.width();
             this.nWinHei = this.$win.height();
             this.bMoveX = true;
             this.bMoveY = true;
+
+            // 显示隐藏放大缩小按钮
+            if(this.nImgWid > this.nWinWid || this.nImgHei > this.nWinHei){
+                $('#changeBigic')[0].style.display = 'inline-block';
+            }else{
+                $('#changeBigic')[0].style.display = 'none';
+            }
 
             if(this.sImgStatus == 'min'){
                 nWid = this.nImgWid > this.nWinWid ? this.nWinWid : this.nImgWid;
@@ -194,8 +201,8 @@
                             oThis.$img.css('cursor','move');
                         }
                 });
-                $(document).off('..bigic').on({
-                    'mousemove..bigic': function(e){
+                $(document).off('.bigic').on({
+                    'mousemove.bigic': function(e){
                             e.preventDefault();
                             if(_move){
                                 var x=e.pageX-_x;
@@ -208,7 +215,7 @@
                                 if(oThis.bMoveY) oThis.$img[0].style.top = y +'px';
                             }
                         },
-                    'mouseup..bigic': function(){
+                    'mouseup.bigic': function(){
                             _move=false;
                             oThis.$img.css('cursor','default');
                         }
